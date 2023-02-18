@@ -4,7 +4,7 @@ import ScoreBoard from './pages/ScoreBoard';
 function App() {
   return (
     <div className='App'>
-      <ScoreBoard />
+      <ScoreBoard/>
     </div>
   );
 }

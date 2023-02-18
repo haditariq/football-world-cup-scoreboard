@@ -1,7 +1,17 @@
 import React from 'react';
 
-const Heading = () => {
-  return <div>Implement me</div>;
+const Heading = ({ title, fontSize, fontWeight }) => {
+  return (
+    <p
+      data-testid={'heading'}
+      style={{
+        fontSize,
+        fontWeight,
+      }}
+    >
+      {title}
+    </p>
+  );
 };
 
 export default Heading;
