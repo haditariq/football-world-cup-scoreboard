@@ -35,7 +35,7 @@ const ScoreBoard = () => {
             className={'inputField'}
           />
 
-          <Button title={'Sart Game'} onPress={onCreateNewGame} />
+          <Button title={'Sart Game'} onPress={onCreateNewGame} className={"submitButton"}/>
         </div>
       </div>
       <div>

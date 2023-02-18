@@ -1,26 +1,38 @@
-.App{
+.App {
   /* text-align: center; */
 }
 
-.textAlign{
-  text-align:center;
+.textAlign {
+  text-align: center;
 }
 
-.scoreBoardContainer{
+.scoreBoardContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
 }
 
-.formContainer{
+.formContainer {
   display: flex;
   flex-direction: column;
   text-align: left !important;
 }
 
-
-.inputField{
+.inputField {
   padding: 10px;
   width: 250px;
   display: flex;
+}
+
+.submitButton {
+  border: 1px solid;
+  padding: 10px 0;
+  margin-top: 25px;
+  background-color: transparent;
+  border-radius: 4px;
+}
+
+.submitButton:hover{
+  cursor: pointer;
+  background-color: lightgrey;
 }
