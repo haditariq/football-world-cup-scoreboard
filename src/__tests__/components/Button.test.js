@@ -29,4 +29,11 @@ describe('Button', () => {
     expect(button).not.toBeDisabled();
     expect(button.textContent).toBe(title);
   });
+
+  it('should have a class', () => {
+    const className = 'classname';
+    render(<Button disabled={false} title={''} className={className} />);
+    const value = screen.getByRole('button').className;
+    expect(value).toBe(className);
+  });
 });
