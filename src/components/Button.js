@@ -1,7 +1,7 @@
-const Button = ({ disabled, onPress }) => {
+const Button = ({ title, disabled, onPress }) => {
   return (
     <button disabled={disabled} onClick={onPress}>
-      implement me, I'm a button!
+      {title}
     </button>
   );
 };
