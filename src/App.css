@@ -1,0 +1,10 @@
+.App{
+  text-align: center;
+}
+
+.scoreBoardContainer{
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-evenly;
+}

@@ -5,8 +5,12 @@ import ScoreBoard from './pages/ScoreBoard';
 function App() {
   return (
     <div className='App'>
-      <Heading/>
-      Scoreboard displayes
+        <Heading
+          title={'Live Football World Cup Scoreboard'}
+          fontWeight={'bold'}
+          fontSize={'30px'}
+        />
+
       <ScoreBoard />
     </div>
   );

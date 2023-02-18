@@ -12,8 +12,15 @@ describe('TextField', () => {
 
   it('Should have a valid placeholder', () => {
     const placeholder = 'Enter value';
-    render(<TextField value={""} placeholder={placeholder} />);
+    render(<TextField value={''} placeholder={placeholder} />);
     const value = screen.queryByPlaceholderText(placeholder).placeholder;
     expect(value).toBe(placeholder);
+  });
+
+  it('Should have a className', () => {
+    const className = 'button-container';
+    render(<TextField value={''} placeholder={''} className={className} />);
+    const value = screen.getByTestId("textField").className;
+    expect(value).toBe(className);
   });
 });
