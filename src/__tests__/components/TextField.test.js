@@ -13,7 +13,7 @@ describe('TextField', () => {
   it('Should have a valid placeholder', () => {
     const placeholder = 'Enter value';
     render(<TextField value={""} placeholder={placeholder} />);
-    const value = screen.queryByPlaceholderText(placeholder);
+    const value = screen.queryByPlaceholderText(placeholder).placeholder;
     expect(value).toBe(placeholder);
   });
 });
