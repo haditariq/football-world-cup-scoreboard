@@ -1,10 +1,13 @@
 import './App.css';
+import Heading from './components/Heading';
 import ScoreBoard from './pages/ScoreBoard';
 
 function App() {
   return (
     <div className='App'>
-      <ScoreBoard/>
+      <Heading/>
+      Scoreboard displayes
+      <ScoreBoard />
     </div>
   );
 }

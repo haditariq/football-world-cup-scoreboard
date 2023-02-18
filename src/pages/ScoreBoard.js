@@ -4,8 +4,7 @@ import Heading from '../components/Heading';
 const ScoreBoard = () => {
   return (
     <div>
-      Scoreboard displayes
-      <Heading />
+      <Heading title={'New Game'} fontWeight={'bold'} fontSize={'20px'} />
     </div>
   );
 };
