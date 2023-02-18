@@ -13,4 +13,20 @@ describe('Button', () => {
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
   });
+
+  it('should render a disabled button with title', () => {
+    const title = 'Click me';
+    render(<Button disabled={true} title={title} />);
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(button.textContent).toBe(title);
+  });
+
+  it('should render an active button with title', () => {
+    const title = 'Click me';
+    render(<Button disabled={false} title={title} />);
+    const button = screen.getByRole('button');
+    expect(button).not.toBeDisabled();
+    expect(button.textContent).toBe(title);
+  });
 });
