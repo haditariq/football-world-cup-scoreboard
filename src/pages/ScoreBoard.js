@@ -66,6 +66,8 @@ const ScoreBoard = () => {
             fontWeight={'bold'}
             fontSize={'20px'}
           />
+          <Heading title={'Please select a match to edit scores.'} fontWeight={'normal'} />
+
         </div>
 
         <select
@@ -74,6 +76,7 @@ const ScoreBoard = () => {
           className='selectOptionForMatch'
           onChange={(e) => alert(e.target.value)}
         >
+          <option value='select'>Select a match</option>
           <option value='volvo'>Volvo</option>
           <option value='saab'>Saab</option>
           <option value='opel'>Opel</option>
