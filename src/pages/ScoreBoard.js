@@ -6,11 +6,20 @@ import Button from '../components/Button';
 const ScoreBoard = () => {
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
+  const [createGameError, setCreateGameError] = useState('');
 
   const onChangeHomeTeamName = (e) => setHomeTeam(e);
   const onChangeAwayTeamName = (e) => setAwayTeam(e);
 
-  const onCreateNewGame = () => {};
+  const onCreateNewGame = () => {
+    if (!awayTeam.length) {
+      setCreateGameError('Please fill away team name.');
+    } else if (!homeTeam.length) {
+      setCreateGameError('Please fill home team name.');
+    } else {
+      // query to add data to
+    }
+  };
   return (
     <div className={'scoreBoardContainer'}>
       <div>
@@ -35,7 +44,17 @@ const ScoreBoard = () => {
             className={'inputField'}
           />
 
-          <Button title={'Sart Game'} onPress={onCreateNewGame} className={"submitButton"}/>
+          {createGameError.length > 0 && (
+            <div className='red-color'>
+              <Heading title={createGameError} />
+            </div>
+          )}
+
+          <Button
+            title={'Sart Game'}
+            onPress={onCreateNewGame}
+            className={'submitButton'}
+          />
         </div>
       </div>
       <div>
