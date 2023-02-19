@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TextField = ({ value, placeholder, onChange, className }) => {
+const TextField = ({ value, placeholder, onChange, className, disabled }) => {
   return (
     <div>
       <input
@@ -9,6 +9,7 @@ const TextField = ({ value, placeholder, onChange, className }) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={className}
+        disabled={disabled}
       />
     </div>
   );

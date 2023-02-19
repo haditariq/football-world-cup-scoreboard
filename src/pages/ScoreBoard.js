@@ -87,6 +87,7 @@ const ScoreBoard = () => {
             value={homeTeam}
             onChange={onChangeHomeTeamName}
             className={'inputField'}
+            disabled={!selectedMatch ? true : false}
           />
 
           <Heading title={'Portogal (away):'} fontWeight={'bold'} />
@@ -95,6 +96,7 @@ const ScoreBoard = () => {
             value={awayTeam}
             onChange={onChangeAwayTeamName}
             className={'inputField'}
+            disabled={!selectedMatch ? true : false}
           />
 
           <div className={['red-color vertical-space'].join(' ')}>
