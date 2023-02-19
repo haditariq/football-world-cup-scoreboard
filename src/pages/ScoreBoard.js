@@ -8,6 +8,10 @@ const ScoreBoard = () => {
   const [awayTeam, setAwayTeam] = useState('');
   const [createGameError, setCreateGameError] = useState('');
 
+  const [selectedMatch, setSelectedMatch] = useState(null);
+
+  const [allMatches, setAllMatches] = useState([]);
+
   const onChangeHomeTeamName = (e) => setHomeTeam(e);
   const onChangeAwayTeamName = (e) => setAwayTeam(e);
 
@@ -30,7 +34,7 @@ const ScoreBoard = () => {
         <div className='formContainer'>
           <Heading title={'Home Team:'} fontWeight={'bold'} />
           <TextField
-            placeholder={'Enter Home Team Name...'}
+            placeholder={'Enter Home Team Score...'}
             value={homeTeam}
             onChange={onChangeHomeTeamName}
             className={'inputField'}
@@ -38,17 +42,15 @@ const ScoreBoard = () => {
 
           <Heading title={'Away Team:'} fontWeight={'bold'} />
           <TextField
-            placeholder={'Enter Away Team Name...'}
+            placeholder={'Enter Away Team Score...'}
             value={awayTeam}
             onChange={onChangeAwayTeamName}
             className={'inputField'}
           />
 
-          {createGameError.length > 0 && (
-            <div className='red-color'>
-              <Heading title={createGameError} />
-            </div>
-          )}
+          <div className={['red-color vertical-space'].join(' ')}>
+            {createGameError.length > 0 && <Heading title={createGameError} />}
+          </div>
 
           <Button
             title={'Sart Game'}
@@ -63,6 +65,47 @@ const ScoreBoard = () => {
             title={'Update Score'}
             fontWeight={'bold'}
             fontSize={'20px'}
+          />
+        </div>
+
+        <select
+          name='cars'
+          id='cars'
+          className='selectOptionForMatch'
+          onChange={(e) => alert(e.target.value)}
+        >
+          <option value='volvo'>Volvo</option>
+          <option value='saab'>Saab</option>
+          <option value='opel'>Opel</option>
+          <option value='audi'>Audi</option>
+        </select>
+
+        <div className='formContainer'>
+          <Heading title={'Brazil (home):'} fontWeight={'bold'} />
+          <TextField
+            placeholder={'Enter Home Team Name...'}
+            value={homeTeam}
+            onChange={onChangeHomeTeamName}
+            className={'inputField'}
+          />
+
+          <Heading title={'Portogal (away):'} fontWeight={'bold'} />
+          <TextField
+            placeholder={'Enter Away Team Name...'}
+            value={awayTeam}
+            onChange={onChangeAwayTeamName}
+            className={'inputField'}
+          />
+
+          <div className={['red-color vertical-space'].join(' ')}>
+            {createGameError.length > 0 && <Heading title={createGameError} />}
+          </div>
+
+          <Button
+            title={'Update Score'}
+            onPress={onCreateNewGame}
+            className={'submitButton'}
+            disabled={!selectedMatch ? true : false}
           />
         </div>
       </div>

@@ -39,3 +39,12 @@
 .red-color {
   color: red;
 }
+
+.vertical-space{
+  margin: 10px 0px;
+}
+
+.selectOptionForMatch{
+  width: 100%;
+  padding: 10px;
+}
