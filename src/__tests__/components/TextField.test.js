@@ -23,4 +23,13 @@ describe('TextField', () => {
     const value = screen.getByTestId("textField").className;
     expect(value).toBe(className);
   });
+
+  it('Should be disabled', () => {
+    const className = 'button-container';
+    render(<TextField value={''} placeholder={''} className={className} disabled={true} />);
+    const value = screen.getByTestId("textField");
+    expect(value.className).toBe(className);
+    expect(value).toBeDisabled();
+
+  });
 });
