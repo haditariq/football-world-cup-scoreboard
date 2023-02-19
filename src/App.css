@@ -29,6 +29,8 @@
   padding: 10px 0;
   background-color: transparent;
   border-radius: 4px;
+  width: 100%;
+  margin-top: 5px;
 }
 
 .submitButton:hover {
@@ -40,11 +42,26 @@
   color: red;
 }
 
-.vertical-space{
+.vertical-space {
   margin: 10px 0px;
 }
 
-.selectOptionForMatch{
+.selectOptionForMatch {
   width: 100%;
   padding: 10px;
+}
+
+ul > * {
+  list-style: none;
+}
+
+.datalistContainer {
+  position: absolute;
+  background-color: white;
+  width: 99%;
+  border: 1px solid;
+  border-top: 0;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  z-index: 1000;
 }
