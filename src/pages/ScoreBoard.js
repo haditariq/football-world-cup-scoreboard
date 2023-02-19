@@ -7,6 +7,10 @@ import DataList from '../components/DataList';
 const ScoreBoard = () => {
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
+
+  const [homeScore, setHomeScore] = useState('');
+  const [awayScore, setAwayScore] = useState('');
+
   const [createGameError, setCreateGameError] = useState('');
 
   const [teams, setTeams] = useState(['dff', 'fsfd', 'fsdfsd']);
@@ -17,6 +21,9 @@ const ScoreBoard = () => {
 
   const onChangeHomeTeamName = (e) => setHomeTeam(e);
   const onChangeAwayTeamName = (e) => setAwayTeam(e);
+
+  const onChangeAwayScore = (e) => setAwayScore(e);
+  const onChangeHomeScore = (e) => setHomeScore(e);
 
   const onCreateNewGame = () => {
     if (!awayTeam.length) {
@@ -40,8 +47,8 @@ const ScoreBoard = () => {
             <div style={{ position: 'relative' }}>
               <TextField
                 placeholder={'Enter Home Team Score...'}
-                value={homeTeam}
-                onChange={onChangeHomeTeamName}
+                value={homeScore}
+                onChange={onChangeHomeScore}
                 className={'inputField'}
               />
 
@@ -54,8 +61,8 @@ const ScoreBoard = () => {
             <div style={{ position: 'relative' }}>
               <TextField
                 placeholder={'Enter Away Team Score...'}
-                value={awayTeam}
-                onChange={onChangeAwayTeamName}
+                value={awayScore}
+                onChange={onChangeAwayScore}
                 className={'inputField'}
               />
 
