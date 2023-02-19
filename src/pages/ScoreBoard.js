@@ -12,6 +12,7 @@ const ScoreBoard = () => {
   const [awayScore, setAwayScore] = useState('');
 
   const [createGameError, setCreateGameError] = useState('');
+  const [updateGameError, setUpdateGameError] = useState('');
 
   const [teams, setTeams] = useState(['dff', 'fsfd', 'fsdfsd']);
 
@@ -134,7 +135,7 @@ const ScoreBoard = () => {
         />
 
         <div className={['red-color vertical-space'].join(' ')}>
-          {createGameError.length > 0 && <Heading title={createGameError} />}
+          {updateGameError.length > 0 && <Heading title={updateGameError} />}
         </div>
 
         <Button
