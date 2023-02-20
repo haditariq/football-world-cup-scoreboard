@@ -35,22 +35,21 @@ const ScoreBoard = () => {
   const onChangeAwayScore = (e) => setAwayScore(e);
   const onChangeHomeScore = (e) => setHomeScore(e);
 
-  const onCreateNewGame = () => {
+  const onCreateNewGame = async () => {
     if (!awayTeam.length) {
       setCreateGameError('Please fill away team name.');
     } else if (!homeTeam.length) {
       setCreateGameError('Please fill home team name.');
     } else {
       // query to add data to
+      const homeTeamDoc = await TeamService.postTeam(homeTeam);
+      console.log({ homeTeamDoc });
+      // const awayTeamDoc = await TeamService.postTeam(awayTeam)
     }
   };
 
-  const createNewTeam = async () => {
-    console.log(await TeamService.postTeam('jingle'));
-  };
-
   // const teams = useLiveQuery(async () => {
-  //   return await db.team.toArray();
+  //   return await TeamService.getTeams();
   // });
 
   const teams = [
@@ -62,24 +61,24 @@ const ScoreBoard = () => {
 
   const filterHomeTeams = () => {
     const filtered = [...removeSelectedTeams()].filter(
-      (i) => i.name.indexOf(homeTeam.toLowerCase()) !== -1
+      (i) => i.name.toLowerCase().indexOf(homeTeam.toLowerCase()) !== -1
     );
-    console.log({ filtered });
     return filtered;
   };
 
   const filterAwayTeams = () => {
     const filtered = [...removeSelectedTeams()].filter(
-      (i) => i.name.indexOf(awayTeam.toLowerCase()) !== -1
+      (i) => i.name.toLowerCase().indexOf(awayTeam.toLowerCase()) !== -1
     );
     return filtered;
   };
 
   const removeSelectedTeams = () => {
+    if(!homeTeam.length && !awayTeam.length) return teams;
+
     const filtered = teams.filter(
-      (i) => i.name.indexOf(homeTeam) == -1 || i.name.indexOf(awayTeam) == -1
+      (i) => i.name.indexOf(homeTeam.toLowerCase()) == -1 || i.name.indexOf(awayTeam) == -1
     );
-    console.log('FILLLLLL', filtered);
     return filtered;
   };
 
