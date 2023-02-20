@@ -4,8 +4,10 @@ import TextField from '../components/TextField';
 import Button from '../components/Button';
 import DataList from '../components/DataList';
 import TeamService from '../api/teams';
+import MatchService from '../api/matches';
 import { useLiveQuery } from 'dexie-react-hooks';
-import db from '../config/db';
+import ScoreBoardSummary from '../components/ScoreBoardSummary';
+import matchesService from '../api/matches';
 
 const ScoreBoard = () => {
   const [homeTeam, setHomeTeam] = useState('');
@@ -43,48 +45,50 @@ const ScoreBoard = () => {
     } else {
       // query to add data to
       const homeTeamDoc = await TeamService.postTeam(homeTeam);
-      console.log({ homeTeamDoc });
-      // const awayTeamDoc = await TeamService.postTeam(awayTeam)
+      const awayTeamDoc = await TeamService.postTeam(awayTeam);
+      const newMatch = await MatchService.postMatch({
+        homeTeam: homeTeamDoc,
+        awayTeam: awayTeamDoc,
+      });
+      console.log({ newMatch });
     }
   };
 
-  // const teams = useLiveQuery(async () => {
-  //   return await TeamService.getTeams();
-  // });
+  let teams = useLiveQuery(async () => {
+    return (await TeamService.getTeams()) || [];
+  });
 
-  const teams = [
-    { name: 'barzil' },
-    { name: 'argentina' },
-    { name: 'Portugal' },
-    { name: 'madrid' },
-  ];
+  let matches = useLiveQuery(async () => {
+    return await MatchService.getMatches();
+  });
+
+  // if (!matches) matches = [];
+  if (!teams) teams = [];
 
   const filterHomeTeams = () => {
-    const filtered = [...removeSelectedTeams()].filter(
-      (i) => i.name.toLowerCase().indexOf(homeTeam.toLowerCase()) !== -1
+    const filtered = [...removeSelectedTeams()]?.filter(
+      (i) => i.name.toLowerCase()?.indexOf(homeTeam.toLowerCase()) !== -1
     );
     return filtered;
   };
 
   const filterAwayTeams = () => {
     const filtered = [...removeSelectedTeams()].filter(
-      (i) => i.name.toLowerCase().indexOf(awayTeam.toLowerCase()) !== -1
+      (i) => i.name.toLowerCase()?.indexOf(awayTeam.toLowerCase()) !== -1
     );
-    return filtered;
+    return filtered || [];
   };
 
   const removeSelectedTeams = () => {
-    if(!homeTeam.length && !awayTeam.length) return teams;
+    if (!homeTeam.length && !awayTeam.length) return teams || [];
 
-    const filtered = teams.filter(
-      (i) => i.name.indexOf(homeTeam.toLowerCase()) == -1 || i.name.indexOf(awayTeam) == -1
+    const filtered = teams?.filter(
+      (i) =>
+        i.name?.indexOf(homeTeam.toLowerCase()) === -1 ||
+        i.name?.indexOf(awayTeam) === -1
     );
-    return filtered;
+    return filtered || [];
   };
-
-  useEffect(() => {
-    // createNewTeam()
-  }, []);
 
   return (
     <div className={'scoreBoardContainer'}>
@@ -173,13 +177,15 @@ const ScoreBoard = () => {
           name='cars'
           id='cars'
           className='selectOptionForMatch'
-          onChange={(e) => alert(e.target.value)}
+          placeholder=''
+          onChange={(e) => setSelectedMatch(matches[e])}
         >
           <option value='select'>Select a match</option>
-          <option value='volvo'>Volvo</option>
-          <option value='saab'>Saab</option>
-          <option value='opel'>Opel</option>
-          <option value='audi'>Audi</option>
+          {matches?.map((i, idx) => (
+            <option value={idx} key={idx}>
+              {i.homeTeam.name} - {i.awayTeam.name}
+            </option>
+          ))}
         </select>
 
         <div className='formContainer'>
@@ -213,6 +219,13 @@ const ScoreBoard = () => {
           className={'submitButton'}
           disabled={!selectedMatch ? true : false}
         />
+      </div>
+
+      <div>
+        <div className='textAlign'>
+          <Heading title={'Summary'} fontWeight={'bold'} fontSize={'20px'} />
+        </div>
+        <ScoreBoardSummary />
       </div>
     </div>
   );

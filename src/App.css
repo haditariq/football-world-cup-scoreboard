@@ -53,6 +53,7 @@
 
 ul > * {
   list-style: none;
+  padding: 5px 0;
 }
 
 .datalistContainer {
@@ -64,4 +65,16 @@ ul > * {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   z-index: 1000;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
