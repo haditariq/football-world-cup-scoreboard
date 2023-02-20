@@ -1,11 +1,11 @@
 import React from 'react';
 
-const DataList = ({ list }) => {
+const DataList = ({ list, onSelect }) => {
   return (
     <div className='datalistContainer'>
-      <ul>
+      <ul onClick={(e) => onSelect(e.target.value)}>
         {list.map((i, idx) => (
-          <li>{i}</li>
+          <li key={idx}>{i.name}</li>
         ))}
       </ul>
     </div>

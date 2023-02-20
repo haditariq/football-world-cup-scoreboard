@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Heading from '../components/Heading';
 import TextField from '../components/TextField';
 import Button from '../components/Button';
 import DataList from '../components/DataList';
+import TeamService from '../api/teams';
+import { useLiveQuery } from 'dexie-react-hooks';
+import db from '../config/db';
 
 const ScoreBoard = () => {
   const [homeTeam, setHomeTeam] = useState('');
@@ -14,14 +17,20 @@ const ScoreBoard = () => {
   const [createGameError, setCreateGameError] = useState('');
   const [updateGameError, setUpdateGameError] = useState('');
 
-  const [teams, setTeams] = useState(['dff', 'fsfd', 'fsdfsd']);
-
   const [selectedMatch, setSelectedMatch] = useState(null);
 
-  const [allMatches, setAllMatches] = useState([]);
+  const [isHomeTeamSet, setIsHomeTeamSet] = useState(true);
+  const [isAwayTeamSet, setIsAwayTeamSet] = useState(true);
 
-  const onChangeHomeTeamName = (e) => setHomeTeam(e);
-  const onChangeAwayTeamName = (e) => setAwayTeam(e);
+  const onChangeHomeTeamName = (e) => {
+    setHomeTeam(e);
+    setIsHomeTeamSet(false);
+  };
+
+  const onChangeAwayTeamName = (e) => {
+    setAwayTeam(e);
+    setIsAwayTeamSet(false);
+  };
 
   const onChangeAwayScore = (e) => setAwayScore(e);
   const onChangeHomeScore = (e) => setHomeScore(e);
@@ -35,6 +44,49 @@ const ScoreBoard = () => {
       // query to add data to
     }
   };
+
+  const createNewTeam = async () => {
+    console.log(await TeamService.postTeam('jingle'));
+  };
+
+  // const teams = useLiveQuery(async () => {
+  //   return await db.team.toArray();
+  // });
+
+  const teams = [
+    { name: 'barzil' },
+    { name: 'argentina' },
+    { name: 'Portugal' },
+    { name: 'madrid' },
+  ];
+
+  const filterHomeTeams = () => {
+    const filtered = [...removeSelectedTeams()].filter(
+      (i) => i.name.indexOf(homeTeam.toLowerCase()) !== -1
+    );
+    console.log({ filtered });
+    return filtered;
+  };
+
+  const filterAwayTeams = () => {
+    const filtered = [...removeSelectedTeams()].filter(
+      (i) => i.name.indexOf(awayTeam.toLowerCase()) !== -1
+    );
+    return filtered;
+  };
+
+  const removeSelectedTeams = () => {
+    const filtered = teams.filter(
+      (i) => i.name.indexOf(homeTeam) == -1 || i.name.indexOf(awayTeam) == -1
+    );
+    console.log('FILLLLLL', filtered);
+    return filtered;
+  };
+
+  useEffect(() => {
+    // createNewTeam()
+  }, []);
+
   return (
     <div className={'scoreBoardContainer'}>
       <div>
@@ -47,29 +99,47 @@ const ScoreBoard = () => {
           <div>
             <div style={{ position: 'relative' }}>
               <TextField
-                placeholder={'Enter Home Team Score...'}
-                value={homeScore}
-                onChange={onChangeHomeScore}
+                placeholder={'Enter Home Team Name...'}
+                value={homeTeam}
+                onChange={onChangeHomeTeamName}
                 className={'inputField'}
               />
 
-              {homeTeam.length > 0 && teams.length > 0 && (
-                <DataList list={teams} />
-              )}
+              {!isHomeTeamSet &&
+                filterHomeTeams().length > 0 &&
+                homeTeam.length > 0 &&
+                teams.length > 0 && (
+                  <DataList
+                    list={[...filterHomeTeams()]}
+                    onSelect={(e) => {
+                      setHomeTeam([...filterHomeTeams()][e].name);
+                      setIsHomeTeamSet(true);
+                    }}
+                  />
+                )}
             </div>
 
             <Heading title={'Away Team:'} fontWeight={'bold'} />
             <div style={{ position: 'relative' }}>
               <TextField
                 placeholder={'Enter Away Team Score...'}
-                value={awayScore}
-                onChange={onChangeAwayScore}
+                value={awayTeam}
+                onChange={onChangeAwayTeamName}
                 className={'inputField'}
               />
 
-              {awayTeam.length > 0 && teams.length > 0 && (
-                <DataList list={teams} />
-              )}
+              {!isAwayTeamSet &&
+                filterAwayTeams().length > 0 &&
+                awayTeam.length > 0 &&
+                teams.length > 0 && (
+                  <DataList
+                    list={[...filterAwayTeams()]}
+                    onSelect={(e) => {
+                      setAwayTeam([...filterAwayTeams()][e].name);
+                      setIsAwayTeamSet(true);
+                    }}
+                  />
+                )}
             </div>
 
             <div className={['red-color vertical-space'].join(' ')}>
@@ -117,9 +187,9 @@ const ScoreBoard = () => {
           <Heading title={'Brazil (home):'} fontWeight={'bold'} />
 
           <TextField
-            placeholder={'Enter Home Team Name...'}
-            value={homeTeam}
-            onChange={onChangeHomeTeamName}
+            placeholder={'Enter Home Team Score...'}
+            value={homeScore}
+            onChange={onChangeHomeScore}
             className={'inputField'}
             disabled={!selectedMatch ? true : false}
           />
@@ -127,9 +197,9 @@ const ScoreBoard = () => {
 
         <Heading title={'Portogal (away):'} fontWeight={'bold'} />
         <TextField
-          placeholder={'Enter Away Team Name...'}
-          value={awayTeam}
-          onChange={onChangeAwayTeamName}
+          placeholder={'Enter Away Team Score...'}
+          value={awayScore}
+          onChange={onChangeAwayScore}
           className={'inputField'}
           disabled={!selectedMatch ? true : false}
         />
