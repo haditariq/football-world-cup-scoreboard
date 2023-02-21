@@ -2,7 +2,8 @@ import db from '../config/db';
 import MatchesService from './matches';
 const SummaryService = {
   getSummary: async (type) => {
-    const listOfMatches = await MatchesService.getMatches(type);
+    const list = await db.match.toArray()
+    const listOfMatches = await MatchesService.getMatches(type, list);
 
     return new Promise((resolve, reject) => {
       listOfMatches.forEach(async (item, idx) => {
@@ -28,7 +29,7 @@ const SummaryService = {
       })
       .catch((err) => {
         console.log(err.message, 'SUMMARY ERROR!!');
-        alert('Something went wrong with the summary.');
+        // alert('Something went wrong with the summary.');
       });
   },
 };

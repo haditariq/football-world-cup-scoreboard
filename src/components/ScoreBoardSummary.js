@@ -9,7 +9,7 @@ const ScoreBoardSummary = () => {
       return await SummaryService.getSummary('all');
     }) || [];
 
-    if(!summaryList.length) return <Heading title={"No matches!"}/>
+  if (!summaryList.length) return <Heading title={'No Matches!'} />;
   return (
     <table>
       <tr>

@@ -8,6 +8,7 @@ import MatchService from '../api/matches';
 import { useLiveQuery } from 'dexie-react-hooks';
 import ScoreBoardSummary from '../components/ScoreBoardSummary';
 import ScoreBoardService from '../api/scores';
+import db from '../config/db';
 
 const ScoreBoard = () => {
   const [homeTeam, setHomeTeam] = useState('');
@@ -17,7 +18,7 @@ const ScoreBoard = () => {
   const [awayScore, setAwayScore] = useState('');
 
   const [createGameError, setCreateGameError] = useState('');
-  const [updateGameError, setUpdateGameError] = useState('');
+  const [updateGameError, _] = useState('');
 
   const [selectedMatch, setSelectedMatch] = useState(null);
 
@@ -53,15 +54,17 @@ const ScoreBoard = () => {
         homeTeam: homeTeamDoc,
         awayTeam: awayTeamDoc,
       });
+      window.location.reload(true);
     }
   };
 
   let teams = useLiveQuery(async () => {
-    return (await TeamService.getTeams()) || [];
+    return await db.team.toArray();
   });
 
   let matches = useLiveQuery(async () => {
-    return await MatchService.getMatches();
+    const list = await db.match.toArray();
+    return await MatchService.getMatches('other', list);
   });
 
   if (!matches) matches = [];
@@ -96,8 +99,8 @@ const ScoreBoard = () => {
     const scoreBoard = await ScoreBoardService.getScoreBoardByMatchId(
       selectedMatch?.id
     );
-    setHomeScore(scoreBoard.home);
-    setAwayScore(scoreBoard.away);
+    setHomeScore(scoreBoard?.home);
+    setAwayScore(scoreBoard?.away);
   };
 
   const onUpdateGame = async () => {
@@ -206,8 +209,8 @@ const ScoreBoard = () => {
         <select
           className='selectOptionForMatch'
           onChange={(e) => setSelectedMatch(matches[e.target.value])}
+          value={""}
         >
-          <option value='select'>Select a match</option>
           {matches?.map((i, idx) => (
             <option value={idx} key={idx}>
               {i.homeTeam.name} - {i.awayTeam.name}

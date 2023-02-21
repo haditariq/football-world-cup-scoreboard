@@ -15,46 +15,52 @@ const matchesService = {
       await ScoreBoardService.postScoreBoard(doc);
       return await db.match.get({ id: doc });
     } catch (error) {
-      console.error(error);
-      // Expected output: ReferenceError: nonExistentFunction is not defined
-      // (Note: the exact output may be browser-dependent)
+      console.error(error, 'postMatch');
     }
   },
-  getMatches: async (type) => {
-    let list = await db.match
-      .toArray()
-      // .get({ isActive: true })
-      .catch((err) => console.log(err));
-    if (!list) return [];
+  getMatches: async (type, list) => {
+    try {
+      // let list = await db.match
+      //   .toArray()
+        // .get({ isActive: true })
+        // .catch((err) => console.log(err));
+      if (!list) return [];
 
-    const populatedList = [];
+      const populatedList = [];
 
-    return new Promise(async (resolve, reject) => {
-      await list?.forEach(async (i, idx) => {
-        const obj = {
-          id: i.id,
-          homeTeam: await db.team.get({ id: i.homeTeam }),
-          awayTeam: await db.team.get({ id: i.awayTeam }),
-          isActive: i.isActive,
-          createdAt: i.createdAt,
-        };
-        if (type !== 'all') {
-          if (i.isActive === true) {
+      return new Promise(async (resolve, reject) => {
+        await list?.forEach(async (i, idx) => {
+          const obj = {
+            id: i.id,
+            homeTeam: await db.team.get({ id: i.homeTeam }),
+            awayTeam: await db.team.get({ id: i.awayTeam }),
+            isActive: i.isActive,
+            createdAt: i.createdAt,
+          };
+          if (type !== 'all') {
+            if (i.isActive === true) {
+              populatedList.push(obj);
+            }
+          } else {
             populatedList.push(obj);
           }
-        } else {
-          populatedList.push(obj);
-        }
-        if (idx == list.length - 1) {
-          resolve(populatedList);
-        }
+          if (idx == list.length - 1) {
+            resolve(populatedList);
+          }
+        });
       });
-    });
+    } catch (e) {
+      console.log(e.message, 'getMatches');
+    }
   },
   endMatch: async (matchId) => {
-    return await db.match.update(matchId, {
-      isActive: false,
-    });
+    try {
+      return await db.match.update(matchId, {
+        isActive: false,
+      });
+    } catch (e) {
+      console.log(e.message, 'endMatch');
+    }
   },
 };
 
