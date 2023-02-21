@@ -7,7 +7,7 @@ import TeamService from '../api/teams';
 import MatchService from '../api/matches';
 import { useLiveQuery } from 'dexie-react-hooks';
 import ScoreBoardSummary from '../components/ScoreBoardSummary';
-import matchesService from '../api/matches';
+import ScoreBoardService from '../api/scores';
 
 const ScoreBoard = () => {
   const [homeTeam, setHomeTeam] = useState('');
@@ -43,6 +43,9 @@ const ScoreBoard = () => {
     } else if (!homeTeam.length) {
       setCreateGameError('Please fill home team name.');
     } else {
+      setHomeTeam('');
+      setAwayTeam('');
+
       // query to add data to
       const homeTeamDoc = await TeamService.postTeam(homeTeam);
       const awayTeamDoc = await TeamService.postTeam(awayTeam);
@@ -50,7 +53,6 @@ const ScoreBoard = () => {
         homeTeam: homeTeamDoc,
         awayTeam: awayTeamDoc,
       });
-      console.log({ newMatch });
     }
   };
 
@@ -62,7 +64,7 @@ const ScoreBoard = () => {
     return await MatchService.getMatches();
   });
 
-  // if (!matches) matches = [];
+  if (!matches) matches = [];
   if (!teams) teams = [];
 
   const filterHomeTeams = () => {
@@ -89,6 +91,18 @@ const ScoreBoard = () => {
     );
     return filtered || [];
   };
+
+  const getScoreBoard = async () => {
+    const scoreBoard = await ScoreBoardService.getScoreBoardByMatchId(
+      selectedMatch?.id
+    );
+    setHomeScore(scoreBoard.home);
+    setAwayScore(scoreBoard.away);
+  };
+
+  useEffect(() => {
+    getScoreBoard();
+  }, [selectedMatch]);
 
   return (
     <div className={'scoreBoardContainer'}>
@@ -174,11 +188,8 @@ const ScoreBoard = () => {
         </div>
 
         <select
-          name='cars'
-          id='cars'
           className='selectOptionForMatch'
-          placeholder=''
-          onChange={(e) => setSelectedMatch(matches[e])}
+          onChange={(e) => setSelectedMatch(matches[e.target.value])}
         >
           <option value='select'>Select a match</option>
           {matches?.map((i, idx) => (
@@ -189,7 +200,12 @@ const ScoreBoard = () => {
         </select>
 
         <div className='formContainer'>
-          <Heading title={'Brazil (home):'} fontWeight={'bold'} />
+          <Heading
+            title={`${
+              selectedMatch ? selectedMatch?.homeTeam.name : ''
+            } (home):`}
+            fontWeight={'bold'}
+          />
 
           <TextField
             placeholder={'Enter Home Team Score...'}
@@ -200,7 +216,10 @@ const ScoreBoard = () => {
           />
         </div>
 
-        <Heading title={'Portogal (away):'} fontWeight={'bold'} />
+        <Heading
+          title={`${selectedMatch ? selectedMatch?.awayTeam.name : ''} (away):`}
+          fontWeight={'bold'}
+        />
         <TextField
           placeholder={'Enter Away Team Score...'}
           value={awayScore}

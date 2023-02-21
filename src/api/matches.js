@@ -1,4 +1,5 @@
 import uuid from 'react-uuid';
+import ScoreBoardService from './scores';
 import db from '../config/db';
 
 const matchesService = {
@@ -10,16 +11,18 @@ const matchesService = {
       isActive: true,
       createdAt: new Date(),
     });
+    const scoreboard = await ScoreBoardService(doc)
+    console.log(scoreboard)
     return await db.match.get({ id: doc });
   },
   getMatches: async () => {
     let list = await db.match.toArray().catch((err) => console.log(err));
-    // if (!list) return [];
+    if (!list) return [];
 
     const populatedList = [];
 
     return new Promise(async (resolve, reject) => {
-      await list.forEach(async (i, idx) => {
+      await list?.forEach(async (i, idx) => {
         populatedList.push({
           id: i.id,
           homeTeam: await db.team.get({ id: i.homeTeam }),
