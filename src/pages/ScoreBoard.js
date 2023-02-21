@@ -209,8 +209,8 @@ const ScoreBoard = () => {
         <select
           className='selectOptionForMatch'
           onChange={(e) => setSelectedMatch(matches[e.target.value])}
-          value={""}
         >
+          <option value='select'>Select a match</option>
           {matches?.map((i, idx) => (
             <option value={idx} key={idx}>
               {i.homeTeam.name} - {i.awayTeam.name}
