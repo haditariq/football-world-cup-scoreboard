@@ -2,7 +2,7 @@ import uuid from 'react-uuid';
 import db from '../config/db';
 
 const scoresService = {
-  postMatch: async (matchId) => {
+  postScoreBoard: async (matchId) => {
     const scoreboard = await db.scoreboard.add({
       id: uuid(),
       away: 0,
@@ -10,10 +10,17 @@ const scoresService = {
       matchId,
       createdAt: new Date(),
     });
-    console.log(scoreboard);
+    return scoreboard
   },
   getScoreBoardByMatchId: async (selectedMatchId) => {
     return await db.scoreboard.get({ matchId: selectedMatchId });
+  },
+  updateScoresByMatchId: async ({ matchId, homeScore, awayScore }) => {
+    const scoreDoc = await db.scoreboard.get({ matchId });
+    return await db.scoreboard.update(scoreDoc.id, {
+      home: homeScore,
+      away: awayScore,
+    });
   },
 };
 

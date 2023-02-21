@@ -49,7 +49,7 @@ const ScoreBoard = () => {
       // query to add data to
       const homeTeamDoc = await TeamService.postTeam(homeTeam);
       const awayTeamDoc = await TeamService.postTeam(awayTeam);
-      const newMatch = await MatchService.postMatch({
+      await MatchService.postMatch({
         homeTeam: homeTeamDoc,
         awayTeam: awayTeamDoc,
       });
@@ -98,6 +98,22 @@ const ScoreBoard = () => {
     );
     setHomeScore(scoreBoard.home);
     setAwayScore(scoreBoard.away);
+  };
+
+  const onUpdateGame = async () => {
+    // update scores on away and hometeam
+    await ScoreBoardService.updateScoresByMatchId({
+      matchId: selectedMatch.id,
+      homeScore,
+      awayScore,
+    });
+    setSelectedMatch(null);
+  };
+
+  const onEndGame = async () => {
+    // end match: turn isActive status false
+    await MatchService.endMatch(selectedMatch.id);
+    setSelectedMatch(null);
   };
 
   useEffect(() => {
@@ -232,12 +248,24 @@ const ScoreBoard = () => {
           {updateGameError.length > 0 && <Heading title={updateGameError} />}
         </div>
 
-        <Button
-          title={'Update Score'}
-          onPress={onCreateNewGame}
-          className={'submitButton'}
-          disabled={!selectedMatch ? true : false}
-        />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div className='width45'>
+            <Button
+              title={'Update Score'}
+              onPress={onUpdateGame}
+              className={'submitButton'}
+              disabled={!selectedMatch ? true : false}
+            />
+          </div>
+          <div className='width45'>
+            <Button
+              title={'End Game'}
+              onPress={() => onEndGame()}
+              className={'submitButton'}
+              disabled={!selectedMatch ? true : false}
+            />
+          </div>
+        </div>
       </div>
 
       <div>
